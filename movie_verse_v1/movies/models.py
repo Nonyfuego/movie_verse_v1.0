@@ -6,12 +6,13 @@ class Movie(models.Model):
     title = models.CharField(max_length=150)
     casts = models.ManyToManyField('Actor')
     director = models.ForeignKey('Director',on_delete=models.CASCADE)
-    cover_photo = models.ImageField()
+    cover_photo = models.ImageField(upload_to='cover_photos/')
     storyline = models.TextField(help_text='Short description about the movie')
-    released_year = models.IntegerField(max_length=4)
+    released_year = models.IntegerField()
     released_date = models.DateField()
     genres = models.ManyToManyField('Genre')
-    runtime = models.Timefield()       #*****unsure of what field to use*****
+    runtime_hour = models.IntegerField()
+    runtime_mins = models.IntegerField()
 
     class Meta:
         ordering = ['title']
@@ -22,7 +23,7 @@ class Movie(models.Model):
 class Actor(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='actor_photos')
     birthdate = models.DateField()
     bio = models.TextField(help_text='Enter Actor bio')
 
@@ -37,21 +38,22 @@ class Actor(models.Model):
 class Director(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='director_photos/')
+    birthdate = models.DateField()
+    bio = models.TextField(help_text='Enter Actor bio')
 
     class Meta:
         ordering = ['first_name']
 
     def __str__(self):
-        full_name = self.first_name + " " + self.last_name
-        return full_name
+        return self.first_name + " " + self.last_name
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['title']
     
     def __str__(self):
-        return self.name
+        return self.title
